@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "838194977365",
+    "firebase_url": "https://cartrack-c31d0-default-rtdb.firebaseio.com",
+    "project_id": "cartrack-c31d0",
+    "storage_bucket": "cartrack-c31d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838194977365:android:2d40325dc66e69bc9652dc",
+        "android_client_info": {
+          "package_name": "com.example.cartrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838194977365-lphc2ok1a1h4kl3ibt3ap6a8gq2hptsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsoHOLuY_Sw4SOhHT2IPY4hq5DOdOXCCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838194977365-lphc2ok1a1h4kl3ibt3ap6a8gq2hptsi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

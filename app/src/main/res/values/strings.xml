@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CarTrack</string>
+    <string name="should_not_blank">Should Not be Blank!!</string>
+</resources>
