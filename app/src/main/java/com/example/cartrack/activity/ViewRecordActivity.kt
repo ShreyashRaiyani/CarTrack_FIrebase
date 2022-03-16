@@ -12,7 +12,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cartrack.MainActivity
 import com.example.cartrack.R
 import com.example.cartrack.adapter.AdapterRecordList
 import com.example.cartrack.adapter.CustomerRecordList
@@ -61,7 +60,7 @@ class ViewRecordActivity : AppCompatActivity(), AdapterRecordList.OnItemClick,
         databaseReference!!.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                if (dataSnapshot.childrenCount.toInt() != 0){
+                if (dataSnapshot.childrenCount.toInt() != 0) {
                     val items: HashMap<String, Items> = dataSnapshot.getValue() as HashMap<String, Items>
 
                     val list = items.values.stream().collect(Collectors.toCollection { ArrayList() })
@@ -86,7 +85,7 @@ class ViewRecordActivity : AppCompatActivity(), AdapterRecordList.OnItemClick,
                         tv_empty.visibility = View.VISIBLE
                         rvRecordList.visibility = View.GONE
                     }
-                }else {
+                } else {
                     tv_empty.visibility = View.VISIBLE
                     rvRecordList.visibility = View.GONE
                 }
@@ -112,12 +111,4 @@ class ViewRecordActivity : AppCompatActivity(), AdapterRecordList.OnItemClick,
         intent.putExtra("recordList", arrList)
         startActivity(intent)
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
 }

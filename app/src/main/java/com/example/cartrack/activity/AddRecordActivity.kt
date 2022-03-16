@@ -375,4 +375,8 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
         })
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
 }
