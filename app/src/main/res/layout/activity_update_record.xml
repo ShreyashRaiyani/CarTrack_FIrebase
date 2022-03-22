@@ -1,204 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.UpdateRecordActivity">
+<layout>
 
-
-    <RelativeLayout
-        android:id="@+id/parentRelative"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:elevation="@dimen/_10ssp"
-            android:visibility="gone" />
+        tools:context=".activity.UpdateRecordActivity">
 
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Toolbar.TitleText"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:paddingStart="@dimen/_minus3sdp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_back"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:titleTextAppearance="@style/Toolbar.TitleText" />
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/parentRelative"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/_10sdp">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <EditText
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:hint="Fullname"
-                android:padding="@dimen/_11sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                android:layout_centerInParent="true"
+                android:elevation="@dimen/_10ssp"
+                android:visibility="gone" />
 
-            <EditText
-                android:id="@+id/etMobile"
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar.TitleText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:hint="Contact number"
-                android:inputType="number"
-                android:padding="@dimen/_11sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:paddingStart="@dimen/_minus3sdp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_back"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:titleTextAppearance="@style/Toolbar.TitleText" />
 
-            <EditText
-                android:id="@+id/etVehicalNo"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:hint="Vehical number"
-                android:padding="@dimen/_11sdp"
-                android:singleLine="true"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/_10sdp">
 
-            <EditText
-                android:id="@+id/etTestDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Test date"
-                android:padding="@dimen/_11sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:hint="Fullname"
+                    android:padding="@dimen/_11sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerUnit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:dropDownVerticalOffset="@dimen/_40sdp"
-                android:padding="@dimen/_10sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:hint="Contact number"
+                    android:inputType="number"
+                    android:padding="@dimen/_11sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinneResult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:dropDownVerticalOffset="@dimen/_40sdp"
-                android:padding="@dimen/_10sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etVehicalNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:hint="Vehical number"
+                    android:padding="@dimen/_11sdp"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-            <EditText
-                android:id="@+id/etReTestDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Re Test date"
-                android:padding="@dimen/_11sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etTestDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Test date"
+                    android:padding="@dimen/_11sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinneFees"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:dropDownVerticalOffset="@dimen/_40sdp"
-                android:padding="@dimen/_10sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinnerUnit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:dropDownVerticalOffset="@dimen/_40sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-            <EditText
-                android:id="@+id/etFee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/edittext_border"
-                android:hint="Fee"
-                android:inputType="number"
-                android:padding="@dimen/_11sdp"
-                android:singleLine="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinneResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:dropDownVerticalOffset="@dimen/_40sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-            <TextView
-                android:id="@+id/btnUpdate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@drawable/btn_border"
-                android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:singleLine="true"
-                android:text="Update"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etReTestDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Re Test date"
+                    android:padding="@dimen/_11sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-        </LinearLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinneFees"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:dropDownVerticalOffset="@dimen/_40sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
-    </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/edittext_border"
+                    android:hint="Fee"
+                    android:inputType="number"
+                    android:padding="@dimen/_11sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:background="@drawable/btn_border"
+                    android:gravity="center"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:text="Update"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

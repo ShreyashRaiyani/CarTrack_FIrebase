@@ -6,41 +6,35 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
 import com.example.cartrack.R
 import com.example.cartrack.adapter.AdapterRecordList
 import com.example.cartrack.adapter.CustomerRecordList
+import com.example.cartrack.databinding.ActivityViewRecordBinding
 import com.example.cartrack.model.Items
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import java.util.stream.Collectors
 
-
 class ViewRecordActivity : AppCompatActivity(), AdapterRecordList.OnItemClick,
     CustomerRecordList.OnItemClick {
+    private lateinit var binding: ActivityViewRecordBinding
 
-    lateinit var rvRecordList: RecyclerView
-    lateinit var tv_empty: TextView
-    lateinit var progressBar: ProgressBar
     var adapterRecordList: AdapterRecordList? = null
     var firebaseDatabase: FirebaseDatabase? = null
     var databaseReference: DatabaseReference? = null
     var customerInfo: Items? = null
-    var list: ArrayList<Items> = ArrayList()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_record)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Customers Record List"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.setNavigationOnClickListener {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_view_record)
+
+        binding.toolbar.title = "Customers Record List"
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
@@ -49,12 +43,8 @@ class ViewRecordActivity : AppCompatActivity(), AdapterRecordList.OnItemClick,
         customerInfo = Items()
 
 
-        tv_empty = findViewById(R.id.tv_empty)
-        progressBar = findViewById(R.id.progressBar)
-        rvRecordList = findViewById(R.id.rvRecordList)
-
         Handler().postDelayed({
-            progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
         }, 2000)
 
         databaseReference!!.addValueEventListener(object : ValueEventListener {
@@ -74,37 +64,29 @@ class ViewRecordActivity : AppCompatActivity(), AdapterRecordList.OnItemClick,
 
                     if (!recordList.isNullOrEmpty()) {
                         adapterRecordList = AdapterRecordList(recordList, this@ViewRecordActivity)
-                        rvRecordList.adapter = adapterRecordList
+                        binding.rvRecordList.adapter = adapterRecordList
                         adapterRecordList!!.notifyDataSetChanged()
                         adapterRecordList?.itemClick = this@ViewRecordActivity
 
-                        tv_empty.visibility = View.GONE
-                        rvRecordList.visibility = View.VISIBLE
+                        binding.tvEmpty.visibility = View.GONE
+                        binding.rvRecordList.visibility = View.VISIBLE
 
                     } else {
-                        tv_empty.visibility = View.VISIBLE
-                        rvRecordList.visibility = View.GONE
+                        binding.tvEmpty.visibility = View.VISIBLE
+                        binding.rvRecordList.visibility = View.GONE
                     }
                 } else {
-                    tv_empty.visibility = View.VISIBLE
-                    rvRecordList.visibility = View.GONE
+                    binding.tvEmpty.visibility = View.VISIBLE
+                    binding.rvRecordList.visibility = View.GONE
                 }
-
-
-
-
-                Log.d("itemssssss", list.toString())
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
                 Log.w("TAG", "Failed to read value.", error.toException())
             }
         })
 
-
     }
-
 
     override fun onItemClick(arrList: Items) {
         val intent = Intent(this, ViewSingleRecordActivity::class.java)

@@ -6,18 +6,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.ScrollView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
 import com.example.cartrack.R
 import com.example.cartrack.adapter.AdapterSearchList
 import com.example.cartrack.adapter.AdapterTodaySearchList
+import com.example.cartrack.databinding.ActivityTodayTestDateBinding
 import com.example.cartrack.model.Items
 import com.google.firebase.database.*
 import com.google.gson.Gson
@@ -31,32 +28,31 @@ import java.util.stream.Collectors
 
 class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick,
     AdapterTodaySearchList.OnItemClick {
+
+    private lateinit var binding: ActivityTodayTestDateBinding
+
     val WRITE_PERMISSON_REQUEST_CODE = 1
     var formatter: SimpleDateFormat? = null
     var date: Date? = null
     var dataList: MutableList<String> = ArrayList()
-    var textString: String? = null
     var simpleSwitch: SwitchCompat? = null
     var firebaseDatabase: FirebaseDatabase? = null
     var databaseReference: DatabaseReference? = null
     var customerInfo: Items? = null
 
-    lateinit var rvTodayRecordList: RecyclerView
-    lateinit var tv_empty: TextView
-    lateinit var main: ScrollView
-    lateinit var btnCreate: TextView
-    lateinit var tvDate: TextView
-    lateinit var progressBar: ProgressBar
     var adapterRecordList: AdapterTodaySearchList? = null
     var todaysList: ArrayList<Items> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_today_test_date)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Today's Customer Test Date"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        setSupportActionBar(toolbar)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_today_test_date)
+
+        binding.toolbar.title = "Today's Customer Test Date"
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        setSupportActionBar(binding.toolbar)
 
         init()
     }
@@ -67,10 +63,6 @@ class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick
         databaseReference = firebaseDatabase!!.getReference("CustomerInfo")
         customerInfo = Items()
 
-        main = findViewById(R.id.main)
-        tv_empty = findViewById(R.id.tv_empty)
-        btnCreate = findViewById(R.id.btnCreate)
-        rvTodayRecordList = findViewById(R.id.rvTodayRecordList)
 
         formatter = SimpleDateFormat("dd/MM/yyyy")
         date = Date()
@@ -79,10 +71,10 @@ class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick
         val headerList: MutableList<String> = ArrayList()
         headerList.add("Name#Mobile#Vehical Number#Test Date#TWO/FOUR#FAIL/PASS#Re Test Date#PAID/FREE#Fee-")
 
-        tvDate = findViewById(R.id.tvDate)
-        progressBar = findViewById(R.id.progressBar)
+//        tvDate = findViewById(R.id.tvDate)
+//        progressBar = findViewById(R.id.progressBar)
 
-        tvDate.text = formatter!!.format(date)
+        binding.tvDate.text = formatter!!.format(date)
 
         simpleSwitch = findViewById(R.id.simpleSwitch)
 
@@ -118,10 +110,10 @@ class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick
                     }
                 } else {
                     Handler().postDelayed({
-                        progressBar.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
                     }, 2000)
-                    tv_empty.visibility = View.VISIBLE
-                    main.visibility = View.GONE
+                    binding.tvEmpty.visibility = View.VISIBLE
+                    binding.main.visibility = View.GONE
                 }
             }
 
@@ -137,7 +129,7 @@ class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick
         val fileName = "TrackReport"
 
 
-        btnCreate.setOnClickListener {
+        binding.btnCreate.setOnClickListener {
 
             easyCsv.createCsvFile(
                 fileName,
@@ -165,7 +157,7 @@ class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick
     private fun itemSearch(recordList: ArrayList<Items>, x: Int) {
 
         Handler().postDelayed({
-            progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
         }, 2000)
 
         val formatter = SimpleDateFormat("dd/MM/yyyy")
@@ -199,16 +191,16 @@ class TodayTestDateActivity : AppCompatActivity(), AdapterSearchList.OnItemClick
             }
 
             adapterRecordList = AdapterTodaySearchList(todaysList, this@TodayTestDateActivity)
-            rvTodayRecordList.adapter = adapterRecordList
+            binding.rvTodayRecordList.adapter = adapterRecordList
             adapterRecordList!!.notifyDataSetChanged()
             adapterRecordList?.itemClick = this@TodayTestDateActivity
 
-            tv_empty.visibility = View.GONE
-            main.visibility = View.VISIBLE
+            binding.tvEmpty.visibility = View.GONE
+            binding.main.visibility = View.VISIBLE
 
         } else {
-            tv_empty.visibility = View.VISIBLE
-            main.visibility = View.GONE
+            binding.tvEmpty.visibility = View.VISIBLE
+            binding.main.visibility = View.GONE
         }
 
 

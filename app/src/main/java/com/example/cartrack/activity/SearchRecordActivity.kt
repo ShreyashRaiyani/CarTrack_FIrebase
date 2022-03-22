@@ -5,14 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
 import com.example.cartrack.R
 import com.example.cartrack.adapter.AdapterSearchList
+import com.example.cartrack.databinding.ActivitySearchRecordBinding
 import com.example.cartrack.model.Items
 import com.google.firebase.database.*
 import com.google.gson.Gson
@@ -21,10 +19,8 @@ import java.util.stream.Collectors
 
 class SearchRecordActivity : AppCompatActivity(), AdapterSearchList.OnItemClick {
 
-    lateinit var editSearch: EditText
-    lateinit var btnSearch: TextView
-    lateinit var rvRecordList: RecyclerView
-    lateinit var tv_empty: TextView
+    private lateinit var binding: ActivitySearchRecordBinding
+
     var adapterRecordList: AdapterSearchList? = null
     var firebaseDatabase: FirebaseDatabase? = null
     var databaseReference: DatabaseReference? = null
@@ -34,11 +30,11 @@ class SearchRecordActivity : AppCompatActivity(), AdapterSearchList.OnItemClick 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_record)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Find Customers Record"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.setNavigationOnClickListener {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search_record)
+
+        binding.toolbar.title = "Find Customers Record"
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
@@ -50,14 +46,6 @@ class SearchRecordActivity : AppCompatActivity(), AdapterSearchList.OnItemClick 
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase!!.getReference("CustomerInfo")
         customerInfo = Items()
-
-        editSearch = findViewById(R.id.editSearch)
-        btnSearch = findViewById(R.id.btnSearch)
-        tv_empty = findViewById(R.id.tv_empty)
-
-
-        rvRecordList = findViewById(R.id.rvRecordList)
-
 
         databaseReference!!.addValueEventListener(object : ValueEventListener {
             @RequiresApi(Build.VERSION_CODES.N)
@@ -77,24 +65,24 @@ class SearchRecordActivity : AppCompatActivity(), AdapterSearchList.OnItemClick 
 
                     if (!recordList.isNullOrEmpty()) {
                         adapterRecordList = AdapterSearchList(recordList, this@SearchRecordActivity)
-                        rvRecordList.adapter = adapterRecordList
+                        binding.rvRecordList.adapter = adapterRecordList
                         adapterRecordList!!.notifyDataSetChanged()
                         adapterRecordList?.itemClick = this@SearchRecordActivity
-                        rvRecordList.visibility = View.VISIBLE
-                        tv_empty.visibility = View.GONE
+                        binding.rvRecordList.visibility = View.VISIBLE
+                        binding.tvEmpty .visibility = View.GONE
 
-                        btnSearch.setOnClickListener {
-                            filter(editSearch.text.toString(), recordList)
+                        binding.btnSearch.setOnClickListener {
+                            filter(binding.editSearch.text.toString(), recordList)
                         }
 
 
                     } else {
-                        tv_empty.visibility = View.VISIBLE
-                        rvRecordList.visibility = View.GONE
+                        binding.tvEmpty.visibility = View.VISIBLE
+                        binding.rvRecordList.visibility = View.GONE
                     }
                 } else {
-                    tv_empty.visibility = View.VISIBLE
-                    rvRecordList.visibility = View.GONE
+                    binding.tvEmpty.visibility = View.VISIBLE
+                    binding.rvRecordList.visibility = View.GONE
                 }
 
 

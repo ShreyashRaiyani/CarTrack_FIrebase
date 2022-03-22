@@ -6,14 +6,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.example.cartrack.MainActivity
 import com.example.cartrack.R
+import com.example.cartrack.databinding.ActivityAddRecordBinding
 import com.example.cartrack.model.Items
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
@@ -22,23 +26,12 @@ import java.util.*
 
 class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    lateinit var spinnerUnit: Spinner
-    lateinit var spinneResult: Spinner
-    lateinit var spinneFees: Spinner
-    lateinit var parentRelative: RelativeLayout
-    lateinit var etTestDate: EditText
-    lateinit var etReTestDate: EditText
-    lateinit var etName: EditText
-    lateinit var etMobile: EditText
-    lateinit var etVehicalNo: EditText
-    lateinit var etFee: EditText
-    lateinit var btnSubmit: TextView
-    lateinit var progressBar: ProgressBar
+    private lateinit var binding: ActivityAddRecordBinding
+
     private var unit: String = "TWO"
     private var result: String = "FAIL"
     private var ispaid: String = "PAID"
     val myCalendar = Calendar.getInstance()
-    private var currentDate = ""
 
     var firebaseDatabase: FirebaseDatabase? = null
     var databaseReference: DatabaseReference? = null
@@ -47,11 +40,11 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_record)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Add new Customer Record"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.setNavigationOnClickListener {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_record)
+
+        binding.toolbar.title = "Add new Customer Record"
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
@@ -64,19 +57,6 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
         databaseReference = firebaseDatabase!!.getReference("CustomerInfo")
         customerInfo = Items()
 
-        parentRelative = findViewById(R.id.parentRelative)
-        spinnerUnit = findViewById(R.id.spinnerUnit)
-        spinneResult = findViewById(R.id.spinneResult)
-        spinneFees = findViewById(R.id.spinneFees)
-        etTestDate = findViewById(R.id.etTestDate)
-        etReTestDate = findViewById(R.id.etReTestDate)
-        etName = findViewById(R.id.etName)
-        etMobile = findViewById(R.id.etMobile)
-        etVehicalNo = findViewById(R.id.etVehicalNo)
-        etFee = findViewById(R.id.etFee)
-        btnSubmit = findViewById(R.id.btnSubmit)
-        progressBar = findViewById(R.id.progressBar)
-
 
         val date = OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             myCalendar[Calendar.YEAR] = year
@@ -85,7 +65,7 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
             updateLabel("1")
         }
 
-        etTestDate.setOnClickListener {
+        binding.etTestDate.setOnClickListener {
             DatePickerDialog(
                 this, date, myCalendar[Calendar.YEAR],
                 myCalendar[Calendar.MONTH],
@@ -100,7 +80,7 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
             updateLabel("2")
         }
 
-        etReTestDate.setOnClickListener {
+        binding.etReTestDate.setOnClickListener {
             DatePickerDialog(
                 this, Redate, myCalendar[Calendar.YEAR],
                 myCalendar[Calendar.MONTH],
@@ -112,23 +92,20 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
         spinerOfResult()
         spinerOfFees()
 
-        val sdf = SimpleDateFormat("dd MMM, yyyy 'at' HH:mm:ss")
-        val currentDateandTime = sdf.format(Date())
 
-        btnSubmit.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             if (isValidate()) {
                 val b = Items()
                 b.id = databaseReference!!.push().key.toString()
-                b.name = etName.text.toString()
-                b.mobile = etMobile.text.toString()
-                b.vehical_no = etVehicalNo.text.toString()
-                b.test_date = etTestDate.text.toString()
+                b.name = binding.etName.text.toString()
+                b.mobile = binding.etMobile.text.toString()
+                b.vehical_no = binding.etVehicalNo.text.toString()
+                b.test_date = binding.etTestDate.text.toString()
                 b.unit = unit
                 b.result = result
-                b.re_test_date = etReTestDate.text.toString()
+                b.re_test_date = binding.etReTestDate.text.toString()
                 b.paid_free = ispaid
-                b.fee = etFee.text.toString()
-//                itemViewModel!!.InsertItem(b)
+                b.fee = binding.etFee.text.toString()
                 addDatatoFirebase(
                     b.id,
                     b.name,
@@ -141,51 +118,50 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                     b.paid_free!!,
                     b.fee!!
                 )
-//                Toast.makeText(this, "Data Added Successfully!!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
 
     private fun isValidate(): Boolean {
-        if (etName.text.toString().trim() == "") {
-            etName.error = resources.getText(R.string.should_not_blank)
+        if (binding.etName.text.toString().trim() == "") {
+            binding.etName.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etName.error = null
-            etName.clearFocus()
+            binding.etName.error = null
+            binding.etName.clearFocus()
         }
 
-        if (etMobile.text.toString().trim() == "") {
-            etMobile.error = resources.getText(R.string.should_not_blank)
+        if (binding.etMobile.text.toString().trim() == "") {
+            binding.etMobile.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etMobile.error = null
-            etMobile.clearFocus()
+            binding.etMobile.error = null
+            binding.etMobile.clearFocus()
         }
 
-        if (etVehicalNo.text.toString().trim() == "") {
-            etVehicalNo.error = resources.getText(R.string.should_not_blank)
+        if (binding.etVehicalNo.text.toString().trim() == "") {
+            binding.etVehicalNo.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etVehicalNo.error = null
-            etVehicalNo.clearFocus()
+            binding.etVehicalNo.error = null
+            binding.etVehicalNo.clearFocus()
         }
 
-        if (etTestDate.text.toString().trim() == "") {
-            etTestDate.error = resources.getText(R.string.should_not_blank)
+        if (binding.etTestDate.text.toString().trim() == "") {
+            binding.etTestDate.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etTestDate.error = null
-            etTestDate.clearFocus()
+            binding.etTestDate.error = null
+            binding.etTestDate.clearFocus()
         }
 
-        if (etFee.text.toString().trim() == "") {
-            etFee.error = resources.getText(R.string.should_not_blank)
+        if (binding.etFee.text.toString().trim() == "") {
+            binding.etFee.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etFee.error = null
-            etFee.clearFocus()
+            binding.etFee.error = null
+            binding.etFee.clearFocus()
         }
 
 
@@ -198,9 +174,9 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
         val sdf = SimpleDateFormat(myFormat, Locale.US)
 
         if (s.equals("1")) {
-            etTestDate.setText(sdf.format(myCalendar.time))
+            binding.etTestDate.setText(sdf.format(myCalendar.time))
         } else {
-            etReTestDate.setText(sdf.format(myCalendar.time))
+            binding.etReTestDate.setText(sdf.format(myCalendar.time))
         }
 
     }
@@ -231,8 +207,8 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 }
             }
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout)
-        spinnerUnit.adapter = dataAdapter
-        spinnerUnit.onItemSelectedListener = this
+        binding.spinnerUnit.adapter = dataAdapter
+        binding.spinnerUnit.onItemSelectedListener = this
     }
 
     private fun spinerOfResult() {
@@ -260,8 +236,8 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 }
             }
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout)
-        spinneResult.adapter = dataAdapter
-        spinneResult.onItemSelectedListener = this
+        binding.spinneResult.adapter = dataAdapter
+        binding.spinneResult.onItemSelectedListener = this
     }
 
     private fun spinerOfFees() {
@@ -289,8 +265,8 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 }
             }
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout)
-        spinneFees.adapter = dataAdapter
-        spinneFees.onItemSelectedListener = this
+        binding.spinneFees.adapter = dataAdapter
+        binding.spinneFees.onItemSelectedListener = this
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -312,9 +288,9 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val message = parent.getItemAtPosition(position).toString()
                 ispaid = message
                 if (message.equals("FREE")) {
-                    etFee.setText("0")
+                    binding.etFee.setText("0")
                 } else {
-                    etFee.setText("")
+                    binding.etFee.setText("")
                 }
             }
         }
@@ -334,7 +310,7 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
         fee: String
     ) {
 
-        progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
 
         customerInfo!!.id = id
         customerInfo!!.name = name
@@ -357,7 +333,7 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                     "Record Added Sucessfully",
                     Toast.LENGTH_SHORT
                 ).show()
-                progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
 
                 val intent = Intent(this@AddRecordActivity, MainActivity::class.java)
                 startActivity(intent)
@@ -370,7 +346,7 @@ class AddRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListene
                     "Fail to add data $error",
                     Toast.LENGTH_SHORT
                 ).show()
-                progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
             }
         })
     }

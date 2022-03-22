@@ -8,14 +8,18 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
 import com.example.cartrack.MainActivity
 import com.example.cartrack.R
+import com.example.cartrack.databinding.ActivityUpdateRecordBinding
 import com.example.cartrack.model.Items
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
@@ -24,22 +28,12 @@ import java.util.*
 
 class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    lateinit var spinnerUnit: Spinner
-    lateinit var spinneResult: Spinner
-    lateinit var spinneFees: Spinner
-    lateinit var parentRelative: RelativeLayout
-    lateinit var etTestDate: EditText
-    lateinit var etReTestDate: EditText
-    lateinit var etName: EditText
-    lateinit var etMobile: EditText
-    lateinit var etVehicalNo: EditText
-    lateinit var etFee: EditText
-    lateinit var btnUpdate: TextView
-    lateinit var progressBar: ProgressBar
+    private lateinit var binding: ActivityUpdateRecordBinding
+
     private var unit: String = ""
     private var result: String = ""
     private var ispaid: String = ""
-    val myCalendar = Calendar.getInstance()
+    val myCalendar: Calendar = Calendar.getInstance()
     private var _id: String = ""
 
     var firebaseDatabase: FirebaseDatabase? = null
@@ -49,11 +43,11 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_update_record)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Update Customer Record"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.setNavigationOnClickListener {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_update_record)
+
+        binding.toolbar.title = "Update Customer Record"
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
@@ -62,37 +56,24 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun init() {
 
-        var bundle: Bundle
-        bundle = intent.extras!!
+        val bundle: Bundle = intent.extras!!
         recordListData = (bundle.getSerializable("update") as Items?)!!
 
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase!!.getReference("CustomerInfo")
         customerInfo = Items()
 
-        parentRelative = findViewById(R.id.parentRelative)
-        spinnerUnit = findViewById(R.id.spinnerUnit)
-        spinneResult = findViewById(R.id.spinneResult)
-        spinneFees = findViewById(R.id.spinneFees)
-        etTestDate = findViewById(R.id.etTestDate)
-        etReTestDate = findViewById(R.id.etReTestDate)
-        etName = findViewById(R.id.etName)
-        etMobile = findViewById(R.id.etMobile)
-        etVehicalNo = findViewById(R.id.etVehicalNo)
-        etFee = findViewById(R.id.etFee)
-        btnUpdate = findViewById(R.id.btnUpdate)
-        progressBar = findViewById(R.id.progressBar)
 
         _id = recordListData.id.toString()
-        etName.setText(recordListData.name)
-        etMobile.setText(recordListData.mobile)
-        etVehicalNo.setText(recordListData.vehical_no)
-        etTestDate.setText(recordListData.test_date)
+        binding.etName.setText(recordListData.name)
+        binding.etMobile.setText(recordListData.mobile)
+        binding.etVehicalNo.setText(recordListData.vehical_no)
+        binding.etTestDate.setText(recordListData.test_date)
         unit = recordListData.unit.toString()
         result = recordListData.result.toString()
-        etReTestDate.setText(recordListData.re_test_date)
+        binding.etReTestDate.setText(recordListData.re_test_date)
         ispaid = recordListData.paid_free.toString()
-        etFee.setText(recordListData.fee)
+        binding.etFee.setText(recordListData.fee)
 
         val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             myCalendar[Calendar.YEAR] = year
@@ -101,7 +82,7 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             updateLabel("1")
         }
 
-        etTestDate.setOnClickListener {
+        binding.etTestDate.setOnClickListener {
             DatePickerDialog(
                 this, date, myCalendar[Calendar.YEAR],
                 myCalendar[Calendar.MONTH],
@@ -109,16 +90,16 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             ).show()
         }
 
-        val Redate = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val reDate = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             myCalendar[Calendar.YEAR] = year
             myCalendar[Calendar.MONTH] = monthOfYear
             myCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
             updateLabel("2")
         }
 
-        etReTestDate.setOnClickListener {
+        binding.etReTestDate.setOnClickListener {
             DatePickerDialog(
-                this, Redate, myCalendar[Calendar.YEAR],
+                this, reDate, myCalendar[Calendar.YEAR],
                 myCalendar[Calendar.MONTH],
                 myCalendar[Calendar.DAY_OF_MONTH]
             ).show()
@@ -128,15 +109,15 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         spinerOfResult()
         spinerOfFees()
 
-        btnUpdate.setOnClickListener {
+        binding.btnUpdate.setOnClickListener {
             if (isValidate()) {
                 val b = Items()
-                b.name = etName.text.toString()
-                b.mobile = etMobile.text.toString()
-                b.vehical_no = etVehicalNo.text.toString()
-                b.test_date = etTestDate.text.toString()
-                b.re_test_date = etReTestDate.text.toString()
-                b.fee = etFee.text.toString()
+                b.name = binding.etName.text.toString()
+                b.mobile = binding.etMobile.text.toString()
+                b.vehical_no = binding.etVehicalNo.text.toString()
+                b.test_date = binding.etTestDate.text.toString()
+                b.re_test_date = binding.etReTestDate.text.toString()
+                b.fee = binding.etFee.text.toString()
                 b.unit = unit
                 b.result = result
                 b.paid_free = ispaid
@@ -158,44 +139,44 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
 
     private fun isValidate(): Boolean {
-        if (etName.text.toString().trim() == "") {
-            etName.error = resources.getText(R.string.should_not_blank)
+        if (binding.etName.text.toString().trim() == "") {
+            binding.etName.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etName.error = null
-            etName.clearFocus()
+            binding.etName.error = null
+            binding.etName.clearFocus()
         }
 
-        if (etMobile.text.toString().trim() == "") {
-            etMobile.error = resources.getText(R.string.should_not_blank)
+        if (binding.etMobile.text.toString().trim() == "") {
+            binding.etMobile.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etMobile.error = null
-            etMobile.clearFocus()
+            binding.etMobile.error = null
+            binding.etMobile.clearFocus()
         }
 
-        if (etVehicalNo.text.toString().trim() == "") {
-            etVehicalNo.error = resources.getText(R.string.should_not_blank)
+        if (binding.etVehicalNo.text.toString().trim() == "") {
+            binding.etVehicalNo.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etVehicalNo.error = null
-            etVehicalNo.clearFocus()
+            binding.etVehicalNo.error = null
+            binding.etVehicalNo.clearFocus()
         }
 
-        if (etTestDate.text.toString().trim() == "") {
-            etTestDate.error = resources.getText(R.string.should_not_blank)
+        if (binding.etTestDate.text.toString().trim() == "") {
+            binding.etTestDate.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etTestDate.error = null
-            etTestDate.clearFocus()
+            binding.etTestDate.error = null
+            binding.etTestDate.clearFocus()
         }
 
-        if (etFee.text.toString().trim() == "") {
-            etFee.error = resources.getText(R.string.should_not_blank)
+        if (binding.etFee.text.toString().trim() == "") {
+            binding.etFee.error = resources.getText(R.string.should_not_blank)
             return false
         } else {
-            etFee.error = null
-            etFee.clearFocus()
+            binding.etFee.error = null
+            binding.etFee.clearFocus()
         }
 
 
@@ -207,10 +188,10 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
         val sdf = SimpleDateFormat(myFormat, Locale.US)
 
-        if (s.equals("1")) {
-            etTestDate.setText(sdf.format(myCalendar.time))
+        if (s == "1") {
+            binding.etTestDate.setText(sdf.format(myCalendar.time))
         } else {
-            etReTestDate.setText(sdf.format(myCalendar.time))
+            binding.etReTestDate.setText(sdf.format(myCalendar.time))
         }
 
     }
@@ -241,17 +222,16 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 }
             }
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout)
-        spinnerUnit.adapter = dataAdapter
-        spinnerUnit.onItemSelectedListener = this
-        if (unit.equals("TWO")) {
-            spinnerUnit.setSelection(0)
+        binding.spinnerUnit.adapter = dataAdapter
+        binding.spinnerUnit.onItemSelectedListener = this
+        if (unit == "TWO") {
+            binding.spinnerUnit.setSelection(0)
         } else {
-            spinnerUnit.setSelection(1)
+            binding.spinnerUnit.setSelection(1)
         }
     }
 
     private fun spinerOfResult() {
-        // Spinner Drop down elements
         val categories: MutableList<String> = ArrayList()
         categories.add("FAIL")
         categories.add("PASS")
@@ -276,17 +256,16 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 }
             }
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout)
-        spinneResult.adapter = dataAdapter
-        spinneResult.onItemSelectedListener = this
-        if (result.equals("FAIL")) {
-            spinneResult.setSelection(0)
+        binding.spinneResult.adapter = dataAdapter
+        binding.spinneResult.onItemSelectedListener = this
+        if (result == "FAIL") {
+            binding.spinneResult.setSelection(0)
         } else {
-            spinneResult.setSelection(1)
+            binding.spinneResult.setSelection(1)
         }
     }
 
     private fun spinerOfFees() {
-        // Spinner Drop down elements
         val categories: MutableList<String> = ArrayList()
         categories.add("PAID")
         categories.add("FREE")
@@ -311,12 +290,12 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                 }
             }
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout)
-        spinneFees.adapter = dataAdapter
-        spinneFees.onItemSelectedListener = this
-        if (ispaid.equals("PAID")) {
-            spinneFees.setSelection(0)
+        binding.spinneFees.adapter = dataAdapter
+        binding.spinneFees.onItemSelectedListener = this
+        if (ispaid == "PAID") {
+            binding.spinneFees.setSelection(0)
         } else {
-            spinneFees.setSelection(1)
+            binding.spinneFees.setSelection(1)
         }
     }
 
@@ -338,8 +317,8 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             parent.id == R.id.spinneFees -> {
                 val message = parent.getItemAtPosition(position).toString()
                 ispaid = message
-                if (message.equals("FREE")) {
-                    etFee.setText("0")
+                if (message == "FREE") {
+                    binding.etFee.setText("0")
                 }
             }
         }
@@ -357,7 +336,7 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         fee: String
     ) {
 
-        progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
         customerInfo!!.id = _id
         customerInfo!!.name = name
         customerInfo!!.mobile = mobile
@@ -384,12 +363,12 @@ class UpdateRecordActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
                         startActivity(intent)
                         finish()
                     }, 700)
-                    progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
                     Toast.makeText(this@UpdateRecordActivity, "Fail to update the Record...", Toast.LENGTH_SHORT).show()
-                    progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                 }
             })
     }

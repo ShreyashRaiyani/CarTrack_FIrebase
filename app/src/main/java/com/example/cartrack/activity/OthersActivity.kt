@@ -6,20 +6,22 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import com.example.cartrack.R
+import com.example.cartrack.databinding.ActivityAddRecordBinding
+import com.example.cartrack.databinding.ActivityOthersBinding
 
 class OthersActivity : AppCompatActivity() {
 
-    lateinit var llToday: LinearLayout
-    lateinit var llSearch: LinearLayout
+    private lateinit var binding: ActivityOthersBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_others)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Other Functions"
-        toolbar.setTitleTextColor(resources.getColor(R.color.white))
-        toolbar.setNavigationOnClickListener {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_others)
+
+        binding.toolbar.title = "Other Functions"
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
@@ -27,14 +29,12 @@ class OthersActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        llToday = findViewById(R.id.llTodaysRecord)
-        llSearch = findViewById(R.id.llSearch)
 
-        llToday.setOnClickListener {
+        binding.llTodaysRecord.setOnClickListener {
             startActivity(Intent(this, TodayTestDateActivity::class.java))
         }
 
-        llSearch.setOnClickListener {
+        binding.llSearch.setOnClickListener {
             startActivity(Intent(this, SearchRecordActivity::class.java))
         }
     }
